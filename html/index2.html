@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  </head>
+  <body>
+    <!-- <img src="http://localhost.com:3000/type_shop.png" alt="png" srcset="" /> -->
+    <!-- <form action="http://localhost.com:3000" method="get">
+      <button type="submit">submit</button>
+    </form> -->
+    <iframe src="http://localhost.com:3000" frameborder="0"></iframe>
+    <script>
+      // fetch("http://localhost:3000");
+      // $.get("http://localhost.com:3000");
+
+      var xhr = new XMLHttpRequest();
+      xhr.withCredentials = true;
+      xhr.open("GET", "http://localhost.com:3000/api", true);
+      xhr.onreadystatechange = function () {
+        console.log("withCredentials=>", xhr.withCredentials);
+      };
+      xhr.send(null);
+    </script>
+  </body>
+</html>
