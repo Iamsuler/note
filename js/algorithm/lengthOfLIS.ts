@@ -1,4 +1,8 @@
+// 最长递增子序列
+// dp定义 dp[i]为nums[i]结尾的最长递增子序列的长度
+
 function lengthOfLIS(nums: number[]): number {
+  // base case
   let dp = new Array(nums.length).fill(1);
   for (let i = 0; i < nums.length; i++) {
     for (let j = 0; j < i; j++) {
@@ -7,7 +11,6 @@ function lengthOfLIS(nums: number[]): number {
       }
     }
   }
-  console.log(dp);
   return Math.max(...dp);
 }
 
