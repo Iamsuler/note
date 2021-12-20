@@ -3,7 +3,12 @@
 // 操作如下：插入，删除，替换
 
 function minDistance(word1: string, word2: string): number {
+  let memo = new Map<string, number>();
   function dp(i: number, j: number): number {
+    const key = `${i}-${j}`;
+    if (memo.has(key)) {
+      return memo.get(key)!;
+    }
     // base case当一个字符串遍历完成后，返回另一个字符串的长剩余度
     if (i === -1) {
       return j + 1;
@@ -13,14 +18,17 @@ function minDistance(word1: string, word2: string): number {
     }
 
     if (word1[i] === word2[j]) {
-      return dp(i - 1, j - 1);
+      memo.set(key, dp(i - 1, j - 1));
     } else {
-      return Math.min(
+      const res = Math.min(
         dp(i - 1, j) + 1, // delete
         dp(i, j - 1) + 1, // insert
         dp(i - 1, j - 1) + 1 // replace
       );
+      memo.set(key, res);
     }
+
+    return memo.get(key)!;
   }
 
   return dp(word1.length - 1, word2.length - 1);
