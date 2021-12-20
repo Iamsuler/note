@@ -2,14 +2,17 @@
 
 function maxSumSubArray(nums: number[]): number {
   const len = nums.length;
-  const dp = new Array(len).fill(0);
-  dp[0] = nums[0];
+  // const dp = new Array(len).fill(0);
+  let prev = nums[0];
+  let res = prev;
 
   for (let i = 1; i < len; i++) {
-    dp[i] = Math.max(nums[i], nums[i] + dp[i - 1]);
+    let cur = Math.max(nums[i], nums[i] + prev);
+    prev = cur;
+    res = Math.max(res, prev);
   }
 
-  return Math.max(...dp);
+  return res;
 }
 
 console.log(maxSumSubArray([-3, 1, 3, -1, 2, -4, 2]));
