@@ -13,13 +13,18 @@ function canFinish(piles: number[], speed: number, hour: number): boolean {
 }
 
 function minEatingSpeed(piles: number[], hour: number): number {
-  let max = Math.max(...piles);
+  let low = 1;
+  let high = Math.max(...piles) + 1;
 
-  for (let speed = 1; speed < max; speed++) {
-    if (canFinish(piles, speed, hour)) {
-      return speed;
+  while (low < high) {
+    const mid = low + Math.floor((high - low) / 2);
+
+    if (canFinish(piles, mid, hour)) {
+      high = mid;
+    } else {
+      low = mid + 1;
     }
   }
 
-  return max;
+  return low;
 }
