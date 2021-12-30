@@ -1,3 +1,7 @@
+// 字符串排列
+// 输入两个字符串s,t，判断s中是否包含t的全排列
+// 举例：s = 'helloworld' t = 'oow'  => true // owo
+
 function minWindow(s: string, t: string): boolean {
   let right = 0;
   let left = 0;
@@ -40,5 +44,5 @@ function minWindow(s: string, t: string): boolean {
   return false;
 }
 
-const str = minWindow("ADOBECODEBANC", "XBA");
+const str = minWindow("ADOBECODEBANC", "BA");
 console.log(str);
