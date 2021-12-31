@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      .content {
+        height: 1000px;
+        background-color: #eee;
+      }
+      /* #footer {
+        height: 30px;
+        background-color: red;
+      } */
+      .list-item {
+        height: 20px;
+        line-height: 20px;
+        text-align: center;
+        color: #fff;
+        background-color: red;
+        margin-bottom: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="content"></div>
+    <div id="footer"></div>
+
+    <script>
+      const footer = document.getElementById("footer");
+      function initHtml() {
+        let html = "<ul>";
+        for (let i = 0; i < 100; i++) {
+          html += `<li class="list-item list-item-${i}">${i}</li>`;
+        }
+        html += "</ul>";
+        footer.innerHTML = html;
+      }
+      initHtml();
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((item) => console.log(item));
+        },
+        {
+          rootMargin: "40px",
+        }
+      );
+
+      [...document.getElementsByClassName("list-item")].forEach((el) => {
+        observer.observe(el);
+      });
+      // observer.unobserve()
+      // observer.disconnect()
+    </script>
+  </body>
+</html>
