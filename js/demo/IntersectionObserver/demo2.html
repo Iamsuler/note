@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      #container {
+        width: 500px;
+        height: 1000px;
+        overflow: auto;
+        background-color: #eee;
+      }
+      .observer-wrap {
+        padding-top: 1200px;
+      }
+      #observer {
+        height: 100px;
+        line-height: 100px;
+        text-align: center;
+        background-color: red;
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- root参与设置监听的区域，就比如上面的两个示例，如果给root设置了为一个DIV，那么所有被监听的目标元素，只有那些root元素的子元素，当其可见性变化时，才会触发该实例的回调函数。在该root元素之外的目标元素，可见性变化时，是无法被监听到的。
+
+    并且，还有一个问题，如果root设置为一个DIV，而这个DIV的高度，是高于设备的可视区域的，那么当滚动这个区域时，元素在没有还没有进入设备的可视区域的时候，已经进入了root的可视区域了，那么依然也会触发可视性改变的回调函数，在本小节上面的两个示例中，都可以测试出该种状态。
+
+    作者：天一呀
+    链接：https://www.jianshu.com/p/7c06669ed98e
+    来源：简书
+    著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。 -->
+    <div class="content">
+      <div id="container">
+        <div class="observer-wrap">
+          <div id="observer">被观察对象</div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((item) => console.log(item));
+        },
+        {
+          root: document.getElementById("container"),
+          // rootMargin: "40px",
+        }
+      );
+
+      observer.observe(document.getElementById("observer"));
+      // observer.unobserve()
+      // observer.disconnect()
+    </script>
+  </body>
+</html>
