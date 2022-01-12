@@ -65,24 +65,33 @@ function travers(map) {
   const cache = Array.from(new Array(len), () => new Array(inLen).fill(false));
 
   function dp(lastRow, row, col) {
+    // 越界返回
     if (row >= len || col >= inLen) {
       return;
     }
+
+    // 已搜索返回
     if (cache[row][col]) {
       return;
     }
     cache[row][col] = true;
+
+    // 遇墙返回
     if (map[row][col] === 1) {
       result = result || false;
       return;
     }
 
+    // 成功返回
     if (col === inLen - 1 && map[row][col] === 0) {
       result = result || true;
       return;
     }
 
+    // 搜索左侧
     result = dp(row, row, col + 1) || result;
+
+    // 搜索上下
     result =
       (lastRow > row ? dp(row, row - 1, col) : dp(row, row + 1, col)) || result;
   }
