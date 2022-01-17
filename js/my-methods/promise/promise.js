@@ -21,8 +21,8 @@ class MyPromise {
     this.value = undefined;
     this.reason = undefined;
 
-    this.successCallback = undefined;
-    this.failCallback = undefined;
+    this.successCallback = [];
+    this.failCallback = [];
 
     const resolve = (value) => {
       if (this.status !== PENDING) {
@@ -32,7 +32,9 @@ class MyPromise {
       this.status = FULFILLED;
       this.value = value;
 
-      this.successCallback && this.successCallback(this.value);
+      while (this.successCallback.length) {
+        this.successCallback.shift()(this.value);
+      }
     };
 
     const reject = (reason) => {
@@ -43,7 +45,9 @@ class MyPromise {
       this.status = REJECTED;
       this.reason = reason;
 
-      this.failCallback && this.failCallback(this.reason);
+      while (this.failCallback.length) {
+        this.failCallback.shift()(this.reason);
+      }
     };
 
     executor(resolve, reject);
@@ -57,8 +61,8 @@ class MyPromise {
     } else {
       // 等待
       // 将成功回调和失败回调 存储起来
-      this.successCallback = successCallback;
-      this.failCallback = failCallback;
+      this.successCallback.push(successCallback);
+      this.failCallback.push(failCallback);
     }
   }
 }
@@ -86,6 +90,22 @@ let promise = new MyPromise((resolve, reject) => {
   // reject('失败')
 });
 
+promise.then(
+  (value) => {
+    console.log(value);
+  },
+  (reason) => {
+    console.log(reason);
+  }
+);
+promise.then(
+  (value) => {
+    console.log(value);
+  },
+  (reason) => {
+    console.log(reason);
+  }
+);
 promise.then(
   (value) => {
     console.log(value);
