@@ -17,29 +17,29 @@ const REJECTED = 'rejected';
 
 class MyPromise {
   constructor(executor) {
-    executor(this.resolve, this.reject);
-  }
+    this.status = PENDING;
+    this.value = undefined;
+    this.reason = undefined;
 
-  status = PENDING;
-  value = undefined;
-  reason = undefined;
+    const resolve = (value) => {
+      if (this.status !== PENDING) {
+        return;
+      }
 
-  resolve(value) {
-    if (this.status !== PENDING) {
-      return;
-    }
+      this.status = FULFILLED;
+      this.value = value;
+    };
 
-    this.status = FULFILLED;
-    this.value = value;
-  }
+    const reject = (reason) => {
+      if (this.status !== PENDING) {
+        return;
+      }
 
-  reject(reason) {
-    if (this.status !== PENDING) {
-      return;
-    }
+      this.status = REJECTED;
+      this.reason = reason;
+    };
 
-    this.status = REJECTED;
-    this.reason = reason;
+    executor(resolve, reject);
   }
 
   then(successCallback, failCallback) {
@@ -50,3 +50,17 @@ class MyPromise {
     }
   }
 }
+
+let promise = new MyPromise((resolve, reject) => {
+  resolve('成功');
+  // reject('失败');
+});
+
+promise.then(
+  (value) => {
+    console.log(value);
+  },
+  (reason) => {
+    console.log(reason);
+  }
+);
