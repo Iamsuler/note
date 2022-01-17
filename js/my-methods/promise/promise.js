@@ -54,16 +54,34 @@ class MyPromise {
   }
 
   then(successCallback, failCallback) {
-    if (this.status === FULFILLED) {
-      successCallback(this.value);
-    } else if (this.status === REJECTED) {
-      failCallback(this.reason);
-    } else {
-      // 等待
-      // 将成功回调和失败回调 存储起来
-      this.successCallback.push(successCallback);
-      this.failCallback.push(failCallback);
-    }
+    const tempPromise = new MyPromise((resolve, reject) => {
+      if (this.status === FULFILLED) {
+        const x = successCallback(this.value);
+        // 判断x 的值是普通值 还是 promise 对象
+        // 如果是普通值 直接调用 resolve
+        // 如果是 promise 对象 查看promise 对象返回的结果
+        // 在根据promise 对象返回结果 决定调用 resolve 还是 调用 reject
+        resolvePromise(x, resolve, reject);
+      } else if (this.status === REJECTED) {
+        failCallback(this.reason);
+      } else {
+        // 等待
+        // 将成功回调和失败回调 存储起来
+        this.successCallback.push(successCallback);
+        this.failCallback.push(failCallback);
+      }
+    });
+
+    return tempPromise;
+  }
+}
+function resolvePromise(x, resolve, reject) {
+  if (x instanceof MyPromise) {
+    // promise 对象
+    // x.then(value=>resolve(value), reason=>reject(reason))
+    x.then(resolve, reject);
+  } else {
+    resolve(x);
   }
 }
 
@@ -83,34 +101,60 @@ class MyPromise {
 // );
 
 // 测试异步
+// let promise = new MyPromise((resolve, reject) => {
+//   setTimeout(() => {
+//     resolve('成功');
+//   }, 2000);
+//   // reject('失败')
+// });
+
+// promise.then(
+//   (value) => {
+//     console.log(value);
+//   },
+//   (reason) => {
+//     console.log(reason);
+//   }
+// );
+
+// then多次调用
+// promise.then(
+//   (value) => {
+//     console.log(value);
+//   },
+//   (reason) => {
+//     console.log(reason);
+//   }
+// );
+// promise.then(
+//   (value) => {
+//     console.log(value);
+//   },
+//   (reason) => {
+//     console.log(reason);
+//   }
+// );
+
+// 链式调用
 let promise = new MyPromise((resolve, reject) => {
-  setTimeout(() => {
-    resolve('成功');
-  }, 2000);
+  resolve('成功');
+  // setTimeout(() => {
+  //   resolve('成功')
+  // }, 2000)
   // reject('失败')
 });
 
-promise.then(
-  (value) => {
+function other() {
+  return new MyPromise((resolve, reject) => {
+    resolve('other');
+  });
+}
+
+promise
+  .then((value) => {
     console.log(value);
-  },
-  (reason) => {
-    console.log(reason);
-  }
-);
-promise.then(
-  (value) => {
+    return other();
+  })
+  .then((value) => {
     console.log(value);
-  },
-  (reason) => {
-    console.log(reason);
-  }
-);
-promise.then(
-  (value) => {
-    console.log(value);
-  },
-  (reason) => {
-    console.log(reason);
-  }
-);
+  });
