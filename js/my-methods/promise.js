@@ -2,20 +2,20 @@
 function resolvePromise(promise, tempValue, resolve, reject) {
   // 循环引用报错
   if (promise === tempValue) {
-    return reject(new TypeError("Chaining cycle detected for promise"));
+    return reject(new TypeError('Chaining cycle detected for promise'));
   }
 
   // 防止多次调用
   let called = false;
 
   // tempValue 不是null，且tempValue是对象或者函数
-  if (tempValue !== null && ["object", "function"].includes(typeof tempValue)) {
+  if (tempValue !== null && ['object', 'function'].includes(typeof tempValue)) {
     try {
       // A+ 规定
       let then = tempValue.then;
 
       // 如果then是函数，就默认是promise
-      if (typeof then === "function") {
+      if (typeof then === 'function') {
         // 就让then执行 第一个参数是this   后面是成功的回调 和 失败的回调
         then.call(
           tempValue,
@@ -52,26 +52,26 @@ function resolvePromise(promise, tempValue, resolve, reject) {
 class MyPromise {
   constructor(executor) {
     // 校验executor
-    if (typeof executor !== "function") {
-      throw new Error("Promise resolver is not a function");
+    if (typeof executor !== 'function') {
+      throw new Error('Promise resolver is not a function');
     }
 
     this.value = null;
     this.reason = null;
-    this.statu = "pending";
+    this.statu = 'pending';
     this.onFulfilledCallbacks = [];
     this.onRejectedCallbacks = [];
 
     const resolve = (value) => {
-      if (this.statu === "pending") {
-        this.statu = "fulfilled";
+      if (this.statu === 'pending') {
+        this.statu = 'fulfilled';
         this.value = value;
         this.onFulfilledCallbacks.forEach((cb) => cb(this.value));
       }
     };
     const reject = (reason) => {
-      if (this.statu === "pending") {
-        this.statu = "rejected";
+      if (this.statu === 'pending') {
+        this.statu = 'rejected';
         this.reason = reason;
         this.onRejectedCallbacks.forEach((cb) => cb(this.reason));
       }
@@ -93,15 +93,15 @@ class MyPromise {
   // state 的状态为 rejected则执行 onRejected，同时传入 this.value。
 
   then(onFulfilled, onRejected) {
-    if (typeof onFulfilled !== "function") {
+    if (typeof onFulfilled !== 'function') {
       onFulfilled = (value) => value;
     }
-    if (typeof onRejected !== "function") {
+    if (typeof onRejected !== 'function') {
       onRejected = (reason) => reason;
     }
 
     const tempPromise = new MyPromise((resolve, reject) => {
-      if (this.statu === "pending") {
+      if (this.statu === 'pending') {
         // promise 中是异步执行时，status还未改变，先将回调函数缓存起来
         this.onFulfilledCallbacks.push((value) => {
           setTimeout(() => {
@@ -114,12 +114,12 @@ class MyPromise {
             reject(onRejected(reason));
           });
         });
-      } else if (this.statu === "fulfilled") {
+      } else if (this.statu === 'fulfilled') {
         setTimeout(() => {
           const tempValue = onFulfilled(this.value);
           resolvePromise(tempPromise, tempValue, resolve, reject);
         });
-      } else if (this.statu === "rejected") {
+      } else if (this.statu === 'rejected') {
         setTimeout(() => {
           reject(onRejected(this.reason));
         });
@@ -170,12 +170,35 @@ class MyPromise {
 //   resolve(0);
 // }).then((data) => p);
 
-new MyPromise((resolve, reject) => {
-  resolve(3);
-})
-  .then((value) => {
-    return new MyPromise((resolve, reject) => {
-      resolve(1);
-    });
-  })
-  .then((value) => console.log("value", value));
+// new MyPromise((resolve, reject) => {
+//   resolve(3);
+// })
+//   .then((value) => {
+//     return new MyPromise((resolve, reject) => {
+//       resolve(1);
+//     });
+//   })
+//   .then((value) => console.log("value", value));
+
+// then 方法链式调用识别 Promise 对象自返回
+let promise = new MyPromise((resolve, reject) => {
+  resolve('成功');
+  // setTimeout(() => {
+  //   resolve('成功')
+  // }, 2000)
+  // reject('失败')
+});
+
+let p1 = promise.then((value) => {
+  console.log(value);
+  return p1;
+});
+
+p1.then(
+  (value) => {
+    console.log(value);
+  },
+  (reason) => {
+    console.log(reason.message);
+  }
+);
