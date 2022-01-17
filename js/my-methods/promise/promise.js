@@ -50,27 +50,66 @@ class MyPromise {
       }
     };
 
-    executor(resolve, reject);
+    try {
+      executor(resolve, reject);
+    } catch (error) {
+      reject(error);
+    }
   }
 
   then(successCallback, failCallback) {
+    if (typeof successCallback !== 'function') {
+      successCallback = (value) => value;
+    }
+    if (typeof failCallback !== 'function') {
+      failCallback = (reason) => reason;
+    }
     const tempPromise = new MyPromise((resolve, reject) => {
       if (this.status === FULFILLED) {
         setTimeout(() => {
-          const x = successCallback(this.value);
-          // 判断x 的值是普通值 还是 promise 对象
-          // 如果是普通值 直接调用 resolve
-          // 如果是 promise 对象 查看promise 对象返回的结果
-          // 在根据promise 对象返回结果 决定调用 resolve 还是 调用 reject
-          resolvePromise(tempPromise, x, resolve, reject);
+          try {
+            const x = successCallback(this.value);
+            // 判断x 的值是普通值 还是 promise 对象
+            // 如果是普通值 直接调用 resolve
+            // 如果是 promise 对象 查看promise 对象返回的结果
+            // 在根据promise 对象返回结果 决定调用 resolve 还是 调用 reject
+            resolvePromise(tempPromise, x, resolve, reject);
+          } catch (error) {
+            reject(error);
+          }
         }, 0);
       } else if (this.status === REJECTED) {
-        failCallback(this.reason);
+        setTimeout(() => {
+          try {
+            const x = failCallback(this.reason);
+            resolvePromise(tempPromise, x, resolve, reject);
+          } catch (error) {
+            reject(error);
+          }
+        }, 0);
       } else {
         // 等待
         // 将成功回调和失败回调 存储起来
-        this.successCallback.push(successCallback);
-        this.failCallback.push(failCallback);
+        this.successCallback.push(() => {
+          setTimeout(() => {
+            try {
+              const x = successCallback(this.value);
+              resolvePromise(tempPromise, x, resolve, reject);
+            } catch (error) {
+              reject(error);
+            }
+          }, 0);
+        });
+        this.failCallback.push(() => {
+          setTimeout(() => {
+            try {
+              const x = failCallback(this.reason);
+              resolvePromise(tempPromise, x, resolve, reject);
+            } catch (error) {
+              reject(error);
+            }
+          }, 0);
+        });
       }
     });
 
@@ -186,3 +225,5 @@ p1.then(
     console.log(reason.message);
   }
 );
+
+// 捕获错误及 then 链式调用其他状态代码补充
