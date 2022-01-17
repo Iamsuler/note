@@ -21,6 +21,9 @@ class MyPromise {
     this.value = undefined;
     this.reason = undefined;
 
+    this.successCallback = undefined;
+    this.failCallback = undefined;
+
     const resolve = (value) => {
       if (this.status !== PENDING) {
         return;
@@ -28,6 +31,8 @@ class MyPromise {
 
       this.status = FULFILLED;
       this.value = value;
+
+      this.successCallback && this.successCallback(this.value);
     };
 
     const reject = (reason) => {
@@ -37,6 +42,8 @@ class MyPromise {
 
       this.status = REJECTED;
       this.reason = reason;
+
+      this.failCallback && this.failCallback(this.reason);
     };
 
     executor(resolve, reject);
@@ -47,13 +54,36 @@ class MyPromise {
       successCallback(this.value);
     } else if (this.status === REJECTED) {
       failCallback(this.reason);
+    } else {
+      // 等待
+      // 将成功回调和失败回调 存储起来
+      this.successCallback = successCallback;
+      this.failCallback = failCallback;
     }
   }
 }
 
+// 测试核心方法
+// let promise = new MyPromise((resolve, reject) => {
+//   resolve('成功');
+//   // reject('失败');
+// });
+
+// promise.then(
+//   (value) => {
+//     console.log(value);
+//   },
+//   (reason) => {
+//     console.log(reason);
+//   }
+// );
+
+// 测试异步
 let promise = new MyPromise((resolve, reject) => {
-  resolve('成功');
-  // reject('失败');
+  setTimeout(() => {
+    resolve('成功');
+  }, 2000);
+  // reject('失败')
 });
 
 promise.then(
