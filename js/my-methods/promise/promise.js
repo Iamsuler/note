@@ -56,12 +56,14 @@ class MyPromise {
   then(successCallback, failCallback) {
     const tempPromise = new MyPromise((resolve, reject) => {
       if (this.status === FULFILLED) {
-        const x = successCallback(this.value);
-        // 判断x 的值是普通值 还是 promise 对象
-        // 如果是普通值 直接调用 resolve
-        // 如果是 promise 对象 查看promise 对象返回的结果
-        // 在根据promise 对象返回结果 决定调用 resolve 还是 调用 reject
-        resolvePromise(x, resolve, reject);
+        setTimeout(() => {
+          const x = successCallback(this.value);
+          // 判断x 的值是普通值 还是 promise 对象
+          // 如果是普通值 直接调用 resolve
+          // 如果是 promise 对象 查看promise 对象返回的结果
+          // 在根据promise 对象返回结果 决定调用 resolve 还是 调用 reject
+          resolvePromise(tempPromise, x, resolve, reject);
+        }, 0);
       } else if (this.status === REJECTED) {
         failCallback(this.reason);
       } else {
@@ -75,7 +77,10 @@ class MyPromise {
     return tempPromise;
   }
 }
-function resolvePromise(x, resolve, reject) {
+function resolvePromise(tempPromise, x, resolve, reject) {
+  if (tempPromise === x) {
+    return reject(new TypeError('循环调用错误！'));
+  }
   if (x instanceof MyPromise) {
     // promise 对象
     // x.then(value=>resolve(value), reason=>reject(reason))
@@ -136,6 +141,30 @@ function resolvePromise(x, resolve, reject) {
 // );
 
 // 链式调用
+// let promise = new MyPromise((resolve, reject) => {
+//   resolve('成功');
+//   // setTimeout(() => {
+//   //   resolve('成功')
+//   // }, 2000)
+//   // reject('失败')
+// });
+
+// function other() {
+//   return new MyPromise((resolve, reject) => {
+//     resolve('other');
+//   });
+// }
+
+// promise
+//   .then((value) => {
+//     console.log(value);
+//     return other();
+//   })
+//   .then((value) => {
+//     console.log(value);
+//   });
+
+// then 方法链式调用识别 Promise 对象自返回
 let promise = new MyPromise((resolve, reject) => {
   resolve('成功');
   // setTimeout(() => {
@@ -144,17 +173,16 @@ let promise = new MyPromise((resolve, reject) => {
   // reject('失败')
 });
 
-function other() {
-  return new MyPromise((resolve, reject) => {
-    resolve('other');
-  });
-}
+let p1 = promise.then((value) => {
+  console.log(value);
+  return p1;
+});
 
-promise
-  .then((value) => {
+p1.then(
+  (value) => {
     console.log(value);
-    return other();
-  })
-  .then((value) => {
-    console.log(value);
-  });
+  },
+  (reason) => {
+    console.log(reason.message);
+  }
+);
