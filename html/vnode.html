@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script>
+      class Element {
+        constructor({ tagName, props = null, children = [] }) {
+          this.tagName = tagName;
+          this.props = props;
+          this.children = children || [];
+        }
+
+        render () {
+          let el = document.createElement(this.tagName);
+          if (this.props) {
+            for (const [key, value] of Object.entries(this.props)) {
+              el.setAttribute(key, value);
+            }
+          }
+
+          this.children.forEach(child => {
+            let childEl;
+            if (child instanceof Element) {
+              childEl = child.render();
+            } else {
+              childEl = document.createTextNode(child);
+            }
+
+            el.appendChild(childEl);
+          });
+
+          return el;
+        };
+      }
+
+      // function Element({ tagName, props, children }) {
+      //   if (!(this instanceof Element)) {
+      //     return new Element((tagName, props, children));
+      //   }
+
+      //   this.tagName = tagName;
+      //   this.props = props;
+      //   this.children = children || [];
+      // }
+
+      // Element.prototype.render = function () {
+      //   let el = document.createElement(this.tagName);
+      //   if (this.props) {
+      //     for (const [key, value] of Object.entries(this.props)) {
+      //       el.setAttribute(key, value);
+      //     }
+      //   }
+
+      //   this.children.forEach(child => {
+      //     let childEl;
+      //     if (child instanceof Element) {
+      //       childEl = child.render();
+      //     } else {
+      //       childEl = document.createTextNode(child);
+      //     }
+
+      //     el.appendChild(childEl);
+      //   });
+
+      //   return el;
+      // };
+
+      function reanferToElement(node) {
+        const { tagName, props, children } = node;
+        if (tagName) {
+          let c = children.map((item) => new Element(item));
+
+          return new Element({ tagName, props, children: c });
+        }
+
+        return node;
+      }
+
+      let demoNode = {
+        tagName: 'ul',
+        props: { class: 'list' },
+        children: [
+          { tagName: 'li', children: ['douyin'] },
+          { tagName: 'li', children: ['toutiao'] },
+        ],
+      };
+
+      let VNode = reanferToElement(demoNode);
+
+      console.log(VNode)
+
+      document.getElementById('app').appendChild(VNode.render())
+    </script>
+  </body>
+</html>

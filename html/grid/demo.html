@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>auto-fill vs auto-fit</title>
+  <style>
+    .wrap{
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+      grid-template-rows: 60px;
+      grid-auto-rows: 60px;  /* 默认尺寸 - 默认行高度 */
+      border: 1px solid #dddddd;
+    }
+
+    .wrap2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+      grid-template-rows: 60px;
+      grid-auto-rows: 60px;  /* 默认尺寸 - 默认行高度 */
+      border: 1px solid #dddddd;
+    }
+
+    .item1{background-color: #fed75c94;}
+    .item2{background-color: #f2a3518c;}
+    .item3{background-color: #eb6053a6;}
+    .item4{background-color: #b75d918a;}
+  </style>
+</head>
+<body>
+  <div>auto-fill</div>
+  <div class="wrap">
+    <div class="item1">1</div>
+    <div class="item2">2</div>
+    <div class="item3">3</div>
+    <div class="item4">4</div>
+  </div>
+  <div>auto-fit</div>
+  <div class="wrap2">
+    <div class="item1">1</div>
+    <div class="item2">2</div>
+    <div class="item3">3</div>
+    <div class="item4">4</div>
+  </div>
+</body>
+</html>

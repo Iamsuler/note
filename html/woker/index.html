@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <p>计数: <output id="result"></output></p>
+    <button onclick="startWorker()">开始 Worker</button>
+    <button onclick="stopWorker()">停止 Worker</button>
+    <br /><br />
+
+    <script>
+      const $result = document.getElementById('result');
+      let woker;
+
+      function startWorker() {
+        woker= new Worker('woker.js');
+        woker.postMessage('woker staring');
+
+        woker.addEventListener('message', function (message) {
+          $result.innerText = message.data;
+        })
+      }
+
+      function stopWorker() {
+        woker.postMessage('woker stoping');
+        woker && woker.terminate();
+      }
+    </script>
+  </body>
+</html>
