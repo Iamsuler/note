@@ -17,14 +17,14 @@ function findTargetSumWays(nums: number[], target: number) {
     const cur = nums[i];
 
     // 选择+
-    rest -= cur;
-    backtrack(nums, i + 1, rest);
-    rest += cur;
+    // rest -= cur;
+    backtrack(nums, i + 1, rest - cur);
+    // rest += cur;
 
     // 选择-
-    rest += cur;
-    backtrack(nums, i + 1, rest);
-    rest -= cur;
+    // rest += cur;
+    backtrack(nums, i + 1, rest + cur);
+    // rest -= cur;
   }
 
   backtrack(nums, 0, target);

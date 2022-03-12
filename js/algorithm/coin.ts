@@ -7,7 +7,7 @@
 // 状态 可选择的硬币，剩余容量
 // 选择  选择硬币或者不选择
 // dp定义：若只使用前i个硬币，当容量为j时，有dp[i][j]种方法
-// base case dp[0][...] = 0, dp[...][1] = 1
+// base case dp[0][...] = 0, dp[...][0] = 1
 function change(coins: number[], amount: number): number {
   const len = coins.length;
   const dp = Array.from(new Array(len + 1), () =>
