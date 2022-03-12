@@ -31,8 +31,6 @@ function partition(arr: number[], low: number, high: number): number {
   if (arr[mid] > arr[low]) swap(arr, low, mid);
 
   let pivot = arr[low];
-  let begin = low;
-  let end = high;
 
   while (low < high) {
     while (low < high && arr[high] >= pivot) {
@@ -69,8 +67,9 @@ let createTestArray = (count: number) => {
   }
   return temArray;
 };
-const count = 100000;
+const count = 10;
 const arr = createTestArray(count);
 console.time("quickSort");
 quickSort(arr, 0, count - 1);
+console.log(arr);
 console.timeEnd("quickSort");
