@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .item {
+        height: 20px;
+        margin-bottom: 5px;
+        background-color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <button id="start">start</button>
+      <button id="stop">stop</button>
+    </div>
+    <script>
+      var globalID;
+      const body = document.body;
+
+      function repeatOften() {
+        body.append('<div class="item"></div>');
+        globalID = requestAnimationFrame(repeatOften);
+      }
+
+      document.getElementById("start").addEventListener("click", function () {
+        globalID = requestAnimationFrame(repeatOften);
+      });
+
+      document.getElementById("stop").addEventListener("click", function () {
+        cancelAnimationFrame(globalID);
+      });
+    </script>
+  </body>
+</html>

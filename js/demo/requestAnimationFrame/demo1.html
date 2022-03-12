@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        margin: 0;
+      }
+      #box {
+        position: relative;
+        height: 600px;
+        background-color: #eee;
+      }
+      #animation-box {
+        position: absolute;
+        top: 20px;
+        left: 0;
+        width: 50px;
+        height: 50px;
+        background-color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="box">
+      <div id="animation-box"></div>
+    </div>
+
+    <script>
+      const box = document.getElementById("box");
+      const animationBox = document.getElementById("animation-box");
+      let time = 0;
+      function render(text) {
+        const left = animationBox.offsetLeft;
+        if (left > 2000) {
+          cancelAnimationFrame(rafId);
+        }
+        animationBox.style.left = left + 10 + "px";
+      }
+      let rafId = null;
+      // box.onmousemove = function (e) {
+      //   const { pageX, pageY } = e;
+      //   requestAnimationFrame(() => {
+      //     render(`x: ${pageX}; y: ${pageY}`);
+      //   });
+      // };
+      function animationLoop() {
+        rafId = requestAnimationFrame(animationLoop);
+        render(++time);
+      }
+      animationLoop();
+    </script>
+  </body>
+</html>

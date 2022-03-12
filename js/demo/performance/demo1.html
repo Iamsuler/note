@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+      <button id="add">add</button>
+      <button id="clear">clear</button>
+    </div>
+    <ul id="list"></ul>
+    <script>
+      function createString() {
+        var str = "";
+        for (var n = 0; n < 100; n++) {
+          str += "<li></li>";
+        }
+        return str;
+      }
+      const list = document.getElementById("list");
+
+      document.getElementById("add").onclick = function () {
+        // list.innerHTML = createString();
+        var div = document.createElement("div");
+        div.innerHTML = createString();
+        list.appendChild(div);
+      };
+      document.getElementById("clear").onclick = function () {
+        list.innerHTML = "";
+      };
+    </script>
+  </body>
+</html>
