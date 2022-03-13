@@ -10,7 +10,7 @@ Promise.allSettled = function (promises) {
     let unSettledPromiseCount = promises.length;
 
     promises.forEach((item, index) => {
-      item.then(
+      Promise.resolve(item).then(
         (value) => {
           unSettledPromiseCount--;
           result[index] = {

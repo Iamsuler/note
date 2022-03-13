@@ -15,7 +15,7 @@ Promise.all = function (promises) {
 
     promises.forEach((item, index) => {
       count++;
-      item.then(
+      Promise.resolve(item).then(
         (res) => {
           result[index] = res;
           count === promises.length && resolve(result);

@@ -8,11 +8,27 @@ Promise.race = function (promises) {
 
     promises.forEach((p) => {
       Promise.resolve(p).then(
-        (value) => value,
-        (reason) => {
-          throw reason;
-        }
+        (value) => resolve(value),
+        (reason) => reject(reason)
       );
     });
   });
 };
+
+// test
+let p1 = () => new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve(1)
+  }, 2000)
+})
+let p2 = () =>  new Promise((resolve, reject) => {
+  setTimeout(() => {
+    reject(2)
+  }, 1000)
+})
+
+Promise.race([p1(), p2()]).then(res => {
+  console.log('res', res)
+}).catch(err => {
+  console.log('err', err)
+})
