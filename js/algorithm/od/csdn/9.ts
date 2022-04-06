@@ -33,14 +33,15 @@
 
 function resolve9(nums: number[], money: number): -1 | number {
   const COUNT = 3;
-  let res: number[][] = [];
+  let res: number[] = [];
   let track: number[] = [];
   let len = nums.length;
 
   function dp(start: number, track: number[]) {
     if (track.length === COUNT) {
-      if (track.reduce((a, b) => a + b) <= money) {
-        res.push([...track]);
+      let sum = track.reduce((a, b) => a + b);
+      if (sum <= money) {
+        res.push(sum);
       }
       track = [];
 
@@ -55,7 +56,7 @@ function resolve9(nums: number[], money: number): -1 | number {
 
   dp(0, track);
 
-  return res.length === 0 ? -1 : Math.max(...res.map(sub => sub.reduce((a, b) => a + b), 0))
+  return res.length === 0 ? -1 : Math.max(...res)
 }
 
 console.log(resolve9([23, 26, 36, 27], 78));

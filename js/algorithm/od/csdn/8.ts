@@ -59,7 +59,10 @@ function resolve8(start: number, end: number, str: string): string {
   }
 
   return [...startArr, ...midArr.reverse(), ...endArr].join(' ');
+
+  // return [...sArr.slice(0, start), ...sArr.slice(start, end + 1).reverse(), ...sArr.slice(end + 1)].join(' ');
 }
 
 console.log(resolve8(0, 3, 'I am a js developer.'));
+console.log(resolve8(0, 3, 'I am a developer.'));
 console.log(resolve8(0, 3, '  hello world!'));

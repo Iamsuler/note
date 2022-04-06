@@ -63,11 +63,7 @@ function isSmall(s1: string, s2: string): boolean {
       continue;
     }
 
-    if (c1 < c2) {
-      return true;
-    } else {
-      return false;
-    }
+    return c1 < c2;
   }
 
   return false;

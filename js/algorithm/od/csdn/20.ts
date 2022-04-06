@@ -37,9 +37,9 @@
 
 function resolve20(nums: number[]): number {
   let len = nums.length;
-  let maxStep = Math.ceil(len / 2) - 1;
+  let min = len;
+  let maxStep = Math.ceil(len / 2);
   len--;
-  let set = new Set<number>();
 
   for (let i = 0; i < maxStep; i++) {
     let step = 1;
@@ -51,13 +51,13 @@ function resolve20(nums: number[]): number {
       if (j > len) {
         break;
       } else if (j === len) {
-        set.add(step);
+        min = Math.min(min, step);
         break;
       }
     }
   }
 
-  return set.size === 0 ? -1 : Math.min(...[...set])
+  return min === nums.length ? -1 : min;
 }
 
 console.log(resolve20([7, 5, 9, 4, 2, 6, 8, 3, 5, 4, 3, 9]));

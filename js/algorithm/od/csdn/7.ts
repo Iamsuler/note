@@ -35,7 +35,7 @@ function resolve7(h: number, nums: number[]): number[] {
     let d1 = Math.abs(h - h1);
     let d2 = Math.abs(h - h2);
 
-    return d1 === d2 ? h1 - h2 : d2 > d1 ? -1 : 1;
+    return d1 === d2 ? h1 - h2 : d1 - d2;
   })
 }
 

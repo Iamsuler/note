@@ -49,7 +49,7 @@
 
 function resolve14(nums: number[], max: number): number {
   let maxCount: number = 0;
-  let res: number = 0;
+  // let res: number = 0;
   let len = nums.length;
 
   function dp(start: number, sum: number, count: number) {
@@ -57,7 +57,7 @@ function resolve14(nums: number[], max: number): number {
       return;
     }
     if (count > maxCount) {
-      res = sum;
+      // res = sum;
       maxCount = count;
     }
     for (let i = start; i < len; i++) {
@@ -70,7 +70,7 @@ function resolve14(nums: number[], max: number): number {
     }
   }
 
-  dp(0, res, maxCount);
+  dp(0, 0, maxCount);
 
   return maxCount;
 }
