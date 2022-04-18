@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    #container {
+      height: 500px;
+      width: 500px;
+      padding: 10px;
+      border: 1px solid #aaa;
+      overflow: auto;
+    }
+
+    #list {
+      margin: 0;
+      padding: 0;
+    }
+
+    .item {
+      height: 30px;
+      line-height: 30px;
+      padding: 0 20px;
+      border-bottom: 1px solid #eee;
+      list-style: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <ul id="list"></ul>
+  </div>
+  <script>
+    function getItems() {
+      let html = '';
+
+      for (let i = 0; i < 100; i++) {
+        html += `<li class="item">${i}</li>`
+      }
+
+      return html;
+    }
+
+    const $container = document.getElementById('container');
+    const $list = document.getElementById('list');
+    const listHtml = getItems();
+
+    $list.innerHTML = listHtml;
+
+    console.log('=== container ===')
+    console.log($container.clientWidth, $container.clientHeight)
+    console.log($container.offsetWidth, $container.offsetHeight)
+    console.log($container.scrollWidth, $container.scrollHeight)
+
+    console.log('=== list ===')
+    console.log($list.clientWidth, $list.clientHeight)
+    console.log($list.offsetWidth, $list.offsetHeight)
+    console.log($list.scrollWidth, $list.scrollHeight)
+  </script>
+</body>
+</html>

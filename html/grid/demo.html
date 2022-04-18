@@ -8,9 +8,13 @@
   <style>
     .wrap{
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+      grid-template-columns: repeat(4, 200px); 
       grid-template-rows: 60px;
       grid-auto-rows: 60px;  /* 默认尺寸 - 默认行高度 */
+      justify-items: center;
+      align-items: center;
+      justify-content: start;
+      height: 400px;
       border: 1px solid #dddddd;
     }
 
@@ -22,7 +26,7 @@
       border: 1px solid #dddddd;
     }
 
-    .item1{background-color: #fed75c94;}
+    .item1{background-color: #fed75c94; justify-self: start; align-self: start;}
     .item2{background-color: #f2a3518c;}
     .item3{background-color: #eb6053a6;}
     .item4{background-color: #b75d918a;}
