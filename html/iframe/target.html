@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div>
+    <p><a href="https://segmentfault.com/" target="_parent">测试allow-top-navigation</a></p>
+    <p><a href="https://segmentfault.com/" target="_blank">测试allow-top-navigation</a></p>
+  </div>
+  <!-- <form> -->
+    <input type="text" id="name">
+    <button type="submit" id="submit">submit</button>
+  <!-- </form> -->
+  <button id="alert">alert</button>
+  <button id="open">open</button>
+  <button id="storage">storage</button>
+  <button id="navigation">navigation</button>
+  <script src="../../js/utils/jquery.js"></script>
+  <script>
+    const $name = $('#name');
+    const $btn = $('#submit');
+    const $alert = $('#alert');
+    const $open = $('#open');
+    const $storage = $('#storage');
+    const $nav = $('#navigation');
+    $btn.on('click', function() {
+      $.ajax({
+        url: 'https://www.baidu.com',
+        data: {
+          name: $name.val(),
+        }
+      });
+    });
+
+    $alert.on('click', function() {
+      alert('xxx');
+    });
+
+    $open.on('click', function() {
+      window.open('https://www.baidu.com');
+    });
+
+    $storage.on('click', function() {
+      console.log(sessionStorage.get('name'));
+    });
+
+    $nav.on('click', function() {
+      window.parent.location.href = 'https://www.baidu.com';
+    });
+  </script>
+</body>
+</html>
